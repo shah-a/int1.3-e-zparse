@@ -12,14 +12,14 @@ tag_re = re.compile(r'\d{11} ')
 amount_re = re.compile(r'([\d,]+\.\d{2} )')
 
 # %%
-example_str = '01/25/21 01/20/21 00408951196 NYSTA 25 01/20/21 24 01/20/21 23:50 BUSINESS 5H $1.35 $128.42'
+# example_str = '01/25/21 01/20/21 00408951196 NYSTA 25 01/20/21 24 01/20/21 23:50 BUSINESS 5H $1.35 $128.42'
 
-# %%
-tag = tag_re.search(example_str).group()
-amount = amount_re.search(example_str).group()
+# # %%
+# tag = tag_re.search(example_str).group()
+# amount = amount_re.search(example_str).group()
 
-print(tag)
-print(amount)
+# print(tag)
+# print(amount)
 
 # %%
 file = "misc/examples/statement_02_25_2021.pdf"
@@ -35,7 +35,9 @@ for page in pages:
         tag = tag_re.search(line)
         amount = amount_re.search(line)
         if tag and amount:
-            transactions.append(Transaction(tag.group(), float(amount.group())))
+            tag = tag.group().strip()
+            amount = float(amount.group().replace(',', ''))
+            transactions.append(Transaction(tag, amount))
 
 amount = 0
 
