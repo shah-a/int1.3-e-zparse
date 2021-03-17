@@ -29,29 +29,16 @@ with pdfplumber.open(file) as pdf:
 # %%
 transactions = []
 
-for line in pages[0].split('\n'):
-    tag = tag_re.search(line)
-    amount = amount_re.search(line)
-    if tag and amount:
-        print(tag.group())
-        print(amount.group())
+for page in pages:
+    for line in page.split('\n'):
+        tag = tag_re.search(line)
+        amount = amount_re.search(line)
+        if tag and amount:
+            transactions.append(Transaction(tag.group(), float(amount.group())))
 
+amount = 0
 
-# %% For multiple pages:
-# with pdfplumber.open("misc/examples/statement_02_25_2021.pdf") as pdf:
-#     pages = pdf.pages
-#     for page in pdf.pages:
-#         texts = [page.extract_text() for page in pages]
+for _ in range(len(transactions)):
+    amount += transactions[_].amount
 
-# %% For a single page:
-with pdfplumber.open("misc/examples/statement_02_25_2021.pdf") as pdf:
-    page = pdf.pages[0]
-    text = page.extract_text()
-
-# %%
-lines = text.split('\n')
-
-# %%
-for line in lines:
-    if filter.match(line):
-        print(line)
+print(round(amount, 2))
