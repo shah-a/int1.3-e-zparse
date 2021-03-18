@@ -44,22 +44,26 @@ tags = [
     'Prepaid Toll Payment'
 ]
 
-# %% For combined output (tags only; no lease tag fees or prepaid toll payments):
+# %% For combined output (RegEx detects 11 digit tags only; no lease tag or toll payments):
 data = transactions(pages, r'\d{11} ')
 df_amounts = DataFrame(data)
 
-df_amounts['total'] = Series(df_amounts['amount'].sum())
+total = round(df_amounts['amount'].sum(), 2)
+df_amounts['total'] = Series(total)
 
-# df_amounts.to_csv('transactions/proto_1/combined.csv', index=False)
-df_amounts.to_excel('transactions/proto_1/combined.xlsx', index=False)
+df_amounts.to_csv('transactions/proto_1/combined.csv', index=False)
+# df_amounts.to_excel('transactions/proto_1/combined.xlsx', index=False)
 
 # %% for individual outputs:
 for tag in tags:
     data = transactions(pages, tag)
     df = DataFrame(data)
-    df['total'] = Series(df['amount'].sum())
-    # df.to_csv(f'transactions/proto_2/{tag}.csv', index=False)
-    df.to_excel(f'transactions/proto_2/{tag}.xlsx', index=False)
+
+    total = round(df['amount'].sum(), 2)
+    df['total'] = Series(total)
+
+    df.to_csv(f'transactions/proto_2/{tag}.csv', index=False)
+    # df.to_excel(f'transactions/proto_2/{tag}.xlsx', index=False)
 
 # %% for concatenated individual ouputs:
 df_combined = DataFrame()
@@ -67,8 +71,11 @@ df_combined = DataFrame()
 for tag in tags:
     data = transactions(pages, tag)
     df = DataFrame(data)
-    df['total'] = Series(df['amount'].sum())
+
+    total = round(df['amount'].sum(), 2)
+    df['total'] = Series(total)
+
     df_combined = concat([df_combined, df], axis=1)
 
-# df_combined.to_csv('transactions/proto_3/concatenated.csv', index=False)
-df_combined.to_excel('transactions/proto_3/concatenated.xlsx', index=False)
+df_combined.to_csv('transactions/proto_3/concatenated.csv', index=False)
+# df_combined.to_excel('transactions/proto_3/concatenated.xlsx', index=False)
