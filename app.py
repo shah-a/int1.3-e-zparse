@@ -1,7 +1,7 @@
 # %%
 import re
 import pdfplumber
-from pandas import DataFrame
+from pandas import DataFrame, Series, concat
 from collections import namedtuple
 
 def load_pages():
@@ -40,18 +40,35 @@ tags = [
     '00407041779',
     '00408951196',
     '00409181239',
-    'Lease Tag'
+    'Lease Tag Fee-INT',
+    'Prepaid Toll Payment'
 ]
 
-# %% for individual outputs:
-data_frames = []
-for tag in tags:
-    tag_transactions = transactions(pages, tag)
-    df = DataFrame(tag_transactions)
-    data_frames.append(df)
-    df.to_csv(f'outputs/transactions_{tag}.csv', index=False)
+# %% For combined output (tags only; no lease tag fees or prepaid toll payments):
+data = transactions(pages, r'\d{11} ')
+df_amounts = DataFrame(data)
 
-# %% For combined output:
-output = transactions(pages, r'\d{11} ')
-df = DataFrame(output)
-df.to_csv('outputs/combined.csv', index=False)
+df_amounts['total'] = Series(df_amounts['amount'].sum())
+
+# df_amounts.to_csv('transactions/proto_1/combined.csv', index=False)
+df_amounts.to_excel('transactions/proto_1/combined.xlsx', index=False)
+
+# %% for individual outputs:
+for tag in tags:
+    data = transactions(pages, tag)
+    df = DataFrame(data)
+    df['total'] = Series(df['amount'].sum())
+    # df.to_csv(f'transactions/proto_2/{tag}.csv', index=False)
+    df.to_excel(f'transactions/proto_2/{tag}.xlsx', index=False)
+
+# %% for concatenated individual ouputs:
+df_combined = DataFrame()
+
+for tag in tags:
+    data = transactions(pages, tag)
+    df = DataFrame(data)
+    df['total'] = Series(df['amount'].sum())
+    df_combined = concat([df_combined, df], axis=1)
+
+# df_combined.to_csv('transactions/proto_3/concatenated.csv', index=False)
+df_combined.to_excel('transactions/proto_3/concatenated.xlsx', index=False)
