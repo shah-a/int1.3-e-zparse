@@ -1,11 +1,14 @@
+"""E-ZParse server."""
+
 from flask import Flask, render_template, request, Response
-from scripts.parse import load_pages, parse
+from parse import load_pages, parse
 
 app = Flask(__name__)
 app.config['ENV'] = 'development'
 
 @app.route('/', methods=['GET', 'POST'])
 def home():
+    """Homepage."""
     if request.method == 'GET':
         return render_template('index.html')
 
@@ -24,7 +27,6 @@ def home():
 
 if __name__ == '__main__':
     app.run(debug=True)
-
 
 """
 00406214663, 00406293975, 00407040487,
