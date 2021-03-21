@@ -1,7 +1,9 @@
+"""E-ZPass parsing utility functions."""
+
 import re
+from collections import namedtuple
 import pdfplumber
 from pandas import DataFrame, Series, concat
-from collections import namedtuple
 
 def load_pages(invoice):
     """Returns a list of a pdf's pages as strings/text."""

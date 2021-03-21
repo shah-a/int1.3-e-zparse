@@ -16,12 +16,12 @@ def home():
     tags = tags.split(',')
     tags = [tag.strip() for tag in tags]
 
-    pdf = request.files.get('pdf')
-    pages = load_pages(pdf)
-    result = parse(pages, tags)
+    pdf_input = request.files.get('pdf')
+    pdf_pages = load_pages(pdf_input)
+    pdf_output = parse(pdf_pages, tags)
 
-    response = Response(result, mimetype="text/csv")
-    response.headers.set("Content-Disposition", "attachment", filename='response.csv')
+    response = Response(pdf_output, mimetype="text/csv")
+    response.headers.set("Content-Disposition", "attachment", filename='parsed.csv')
 
     return response
 
