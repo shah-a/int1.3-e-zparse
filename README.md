@@ -9,3 +9,7 @@ blah
 ## How to Use
 
 blah
+
+## Acknowledgements
+
+Pythonic Accountant
