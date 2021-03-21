@@ -28,7 +28,7 @@ def get_transactions(pages, search_term):
                 amount = float(amount.group().replace(',', ''))
                 transactions.append(Transaction(tag, amount))
 
-    return transactions
+    return transactions if transactions else None
 
 def parse(pages, tags):
     """Parses invoice for all tags and returns csv results."""
@@ -36,11 +36,11 @@ def parse(pages, tags):
 
     for tag in tags:
         data = get_transactions(pages, tag)
+        if not data:
+            continue
         df = DataFrame(data)
-
         total = round(df['amount'].sum(), 2)
         df['total'] = Series(total)
-
         df_combined = concat([df_combined, df], axis=1)
 
     return df_combined.to_csv(index=False)

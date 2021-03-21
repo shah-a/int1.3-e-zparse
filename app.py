@@ -5,6 +5,7 @@ from parse import load_pages, parse
 
 app = Flask(__name__)
 app.config['ENV'] = 'development'
+app.config['MAX_CONTENT_LENGTH'] = 1 * (1024 ** 2)  # Sets 1 MB upload limit
 
 @app.route('/', methods=['GET', 'POST'])
 def home():
