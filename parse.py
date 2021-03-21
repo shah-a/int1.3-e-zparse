@@ -5,10 +5,13 @@ from collections import namedtuple
 import pdfplumber
 from pandas import DataFrame, Series, concat
 
-def load_pages(invoice):
+def load_pages(file):
     """Returns a list of a pdf's pages as strings/text."""
-    with pdfplumber.open(invoice) as pdf:
-        return [page.extract_text() for page in pdf.pages]
+    try:
+        with pdfplumber.open(file) as pdf:
+            return [page.extract_text() for page in pdf.pages]
+    except:
+        return []
 
 def get_transactions(pages, search_term):
     """Returns a list of transaction tuples."""

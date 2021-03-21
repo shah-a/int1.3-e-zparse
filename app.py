@@ -4,7 +4,6 @@ from flask import Flask, render_template, request, Response
 from parse import load_pages, parse
 
 app = Flask(__name__)
-app.config['ENV'] = 'development'
 app.config['MAX_CONTENT_LENGTH'] = 1 * (1024 ** 2)  # Sets 1 MB upload limit
 
 @app.route('/', methods=['GET', 'POST'])
@@ -19,7 +18,7 @@ def home():
 
     pdf_input = request.files.get('pdf')
     pdf_pages = load_pages(pdf_input)
-    pdf_output = parse(pdf_pages, tags)
+    pdf_output = parse(pdf_pages, tags) if pdf_pages else None
 
     response = Response(pdf_output, mimetype="text/csv")
     response.headers.set("Content-Disposition", "attachment", filename='parsed.csv')
@@ -28,9 +27,3 @@ def home():
 
 if __name__ == '__main__':
     app.run(debug=True)
-
-"""
-00406214663, 00406293975, 00407040487,
-00407041779, 00408951196, 00409181239,
-Lease Tag Fee-INT, Prepaid Toll Payment
-"""
