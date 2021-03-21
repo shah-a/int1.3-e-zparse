@@ -1,28 +1,33 @@
-from flask import Flask, render_template, request, redirect, url_for
-import pdfplumber
+from flask import Flask, render_template, request, Response
+from scripts.parse import load_pages, parse
 
 app = Flask(__name__)
 app.config['ENV'] = 'development'
 
 @app.route('/', methods=['GET', 'POST'])
 def home():
-    if request.method == 'POST':
-        tags = request.form.get('tags')
-        tags = tags.split(',')
-        tags = [tag.strip() for tag in tags]
+    if request.method == 'GET':
+        return render_template('index.html')
 
-        file = request.files.get('pdf')
+    tags = request.form.get('tags')
+    tags = tags.split(',')
+    tags = [tag.strip() for tag in tags]
 
-        if not file:
-            return redirect(url_for('home'))
+    pdf = request.files.get('pdf')
+    pages = load_pages(pdf)
+    result = parse(pages, tags)
 
-        with pdfplumber.open(file) as pdf:
-            pages = [page.extract_text() for page in pdf.pages]
+    response = Response(result, mimetype="text/csv")
+    response.headers.set("Content-Disposition", "attachment", filename='response.csv')
 
-        print(pages[0])
-
-        return redirect(url_for('home'))
-    return render_template('index.html')
+    return response
 
 if __name__ == '__main__':
     app.run(debug=True)
+
+
+"""
+00406214663, 00406293975, 00407040487,
+00407041779, 00408951196, 00409181239,
+Lease Tag Fee-INT, Prepaid Toll Payment
+"""

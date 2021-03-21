@@ -1,18 +1,17 @@
-# %%
 import re
 import pdfplumber
 from pandas import DataFrame, Series, concat
 from collections import namedtuple
 
-def load_pages():
-    invoice = "misc/examples/statement_02_25_2021.pdf"
+def load_pages(invoice):
+    """Returns a list of a pdf's pages as strings/text."""
     with pdfplumber.open(invoice) as pdf:
         return [page.extract_text() for page in pdf.pages]
 
-def transactions(pages, search_term):
+def get_transactions(pages, search_term):
+    """Returns a list of transaction tuples."""
     Transaction = namedtuple('Transaction', ['tag', 'amount'])
 
-    # tag_re = re.compile(r'\d{11} ')  # This line determines what the script searches for
     tag_re = re.compile(search_term)
     amount_re = re.compile(r'([\d,]+\.\d{2} )')
 
@@ -29,53 +28,17 @@ def transactions(pages, search_term):
 
     return transactions
 
-# %%
-pages = load_pages()
+def parse(pages, tags):
+    """Parses invoice for all tags and returns csv results."""
+    df_combined = DataFrame()
 
-# %%
-tags = [
-    '00406214663',
-    '00406293975',
-    '00407040487',
-    '00407041779',
-    '00408951196',
-    '00409181239',
-    'Lease Tag Fee-INT',
-    'Prepaid Toll Payment'
-]
+    for tag in tags:
+        data = get_transactions(pages, tag)
+        df = DataFrame(data)
 
-# %% For combined output (RegEx detects 11 digit tags only; no lease tag or toll payments):
-data = transactions(pages, r'\d{11} ')
-df_amounts = DataFrame(data)
+        total = round(df['amount'].sum(), 2)
+        df['total'] = Series(total)
 
-total = round(df_amounts['amount'].sum(), 2)
-df_amounts['total'] = Series(total)
+        df_combined = concat([df_combined, df], axis=1)
 
-df_amounts.to_csv('transactions/proto_1/combined.csv', index=False)
-# df_amounts.to_excel('transactions/proto_1/combined.xlsx', index=False)
-
-# %% for individual outputs:
-for tag in tags:
-    data = transactions(pages, tag)
-    df = DataFrame(data)
-
-    total = round(df['amount'].sum(), 2)
-    df['total'] = Series(total)
-
-    df.to_csv(f'transactions/proto_2/{tag}.csv', index=False)
-    # df.to_excel(f'transactions/proto_2/{tag}.xlsx', index=False)
-
-# %% for concatenated individual ouputs:
-df_combined = DataFrame()
-
-for tag in tags:
-    data = transactions(pages, tag)
-    df = DataFrame(data)
-
-    total = round(df['amount'].sum(), 2)
-    df['total'] = Series(total)
-
-    df_combined = concat([df_combined, df], axis=1)
-
-df_combined.to_csv('transactions/proto_3/concatenated.csv', index=False)
-# df_combined.to_excel('transactions/proto_3/concatenated.xlsx', index=False)
+    return df_combined.to_csv(index=False)

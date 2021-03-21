@@ -1,9 +1,8 @@
 # Python
 __pycache__/
 
-# Script
-scripts/misc/
-scripts/transactions/
-
 # .DS_Store
 .DS_Store
+
+# Temp
+misc/
