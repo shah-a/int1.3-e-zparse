@@ -14,9 +14,11 @@
 
 <body>
   <h1>E-ZParse</h1>
-  <form method="POST">
+  <form method="POST" enctype=multipart/form-data>
     <label for="tags">Enter Tags (separated by commas)</label>
     <textarea name="tags" id="tags" cols="30" rows="5"></textarea>
+    <label for="pdf">Invoice (PDF)</label>
+    <input type="file" id="pdf" name="pdf">
     <button type="submit">Submit</button>
   </form>
 </body>
