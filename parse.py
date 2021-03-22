@@ -17,7 +17,7 @@ def get_transactions(pages, search_term):
     """Returns a list of transaction tuples."""
     Transaction = namedtuple('Transaction', ['tag', 'amount'])
 
-    tag_re = re.compile(search_term)
+    tag_re = re.compile(fr'{search_term}', flags=re.IGNORECASE)
     amount_re = re.compile(r'([\d,]+\.\d{2} )')
 
     transactions = []
