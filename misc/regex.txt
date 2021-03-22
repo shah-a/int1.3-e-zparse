@@ -1,0 +1,29 @@
+Regex that were helpful along the way:
+
+Romance dawn:
+^[^$]+
+[^$]+$
+
+Isolate the second last column:
+^[^$]+| ..[^$]+$
+^[^$]+|[\s-\$]+[^$]+$
+
+Isolate the first two sets of dates:
+^((\d{2}\/){2}\d{2} )+
+
+Isolate the last dollar value (including ones with negatives):
+[- ]+\$[\d,]+\.\d{2}$
+[ -]+\$[\d,]+\.\d{2}$
+
+\d{11}|\$[\d,]+.\d{2} \$
+\d{11}|[-\$]+[\d,]+\.\d{2}
+
+Isolate tag/plate number and amount (but with a space at the end of amount):
+\d{11}|(\$[\d,]+\.\d{2} )
+\d{11}|([\d,]+\.\d{2} ) <-- (same thing, but without dollar sign)
+
+Isolate everything except for tag/plate number and amount:
+^(\d{2}\/\d{2}\/\d{2} )+| [A-Z]+ \d{2} \d{2}\/\d{2}\/\d{2} \d{2}[ A-Z:0-9]+\/\d{2}\/\d{2} \d{2}:\d{2} [A-Z]+ \d[A-Z] |[-\s\$]+[^$]+$
+
+Refactored/condensed version of the above:
+^([^ ]+ ){2}|[A-Z ]+[^\$]+|[-\s\$]+[^$]+$
