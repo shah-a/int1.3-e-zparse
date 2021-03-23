@@ -8,19 +8,36 @@
   <title>E-ZParse</title>
   <link rel="shortcut icon" href="/static/favicon.ico">
   <link rel="stylesheet" href="/static/style.css">
+
+  <!-- Google Fonts -->
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@100;300;400;500;700&display=swap" rel="stylesheet">
+
+  <!-- Font Awesome  -->
+  <script defer src="https://kit.fontawesome.com/aa29bc2123.js" crossorigin="anonymous"></script>
 </head>
 
 <body>
-  <h1>E-ZParse</h1>
-  <form method="POST" enctype=multipart/form-data>
-    <label for="tags">Enter Tags (separated by commas)</label>
-    <textarea name="tags" id="tags" cols="30" rows="5"></textarea>
-    <label for="pdf">Invoice PDF (1 MB limit)</label>
-    <input type="file" id="pdf" name="pdf">
-    <button type="submit">Submit</button>
-  </form>
+  <main class="content">
+    <form method="POST" enctype=multipart/form-data class="form">
+      <h1>E-ZParse</h1>
+      <label for="tags">Enter Tags <span class="info">(separated by commas):</span></label>
+      <textarea name="tags" id="tags" rows="7"></textarea>
+      <label for="pdf">Upload PDF <span class="info">(1 MB limit):</span></label>
+      <input type="file" id="pdf" name="pdf">
+      <button type="submit">Parse</button>
+    </form>
+  </main>
+  <footer class="footer">
+    <a href="https://github.com/shah-a/int1.3-e-zparse" target="_blank" class="github">
+      <i class="fab fa-github-alt fa-3x"></i>
+    </a>
+  </footer>
+  <div id="stripes">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
 </body>
 
 </html>
