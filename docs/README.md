@@ -18,7 +18,7 @@ To install and run a local copy of the server:
 
 1) Clone the repository
 
-    `git  clone git@github.com:shah-a/int1.3-e-zparse.git`
+    `git clone git@github.com:shah-a/int1.3-e-zparse.git`
 
 1) Install the requirements (preferably in a fresh [virtual environment][venv])
 
