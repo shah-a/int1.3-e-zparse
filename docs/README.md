@@ -18,16 +18,16 @@ To install and run a local copy of the server:
 
 1) Clone the repository
 
-    `git clone git@github.com:shah-a/int1.3-e-zparse.git`
+    `$ git clone git@github.com:shah-a/int1.3-e-zparse.git`
 
 1) Install the requirements (preferably in a fresh [virtual environment][venv])
 
-    1) `cd 1.3-e-zparse`
-    1) `pip3 install -r requirements.txt`
+    `$ cd 1.3-e-zparse`<br>
+    `$ pip3 install -r requirements.txt`
 
 1) Start the server
 
-    `python3 app.py`
+    `$ python3 app.py`
 
 ### Usage
 
