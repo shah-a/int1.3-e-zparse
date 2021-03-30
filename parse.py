@@ -18,7 +18,7 @@ def get_transactions(pages, search_term):
     Transaction = namedtuple('Transaction', ['tag', 'amount'])
 
     tag_re = re.compile(fr'{search_term}', flags=re.IGNORECASE)
-    amount_re = re.compile(r'([\d,]+\.\d{2} )')
+    amount_re = re.compile(r'([-\$\d,]+\.\d{2} )')
 
     transactions = []
 
@@ -28,7 +28,7 @@ def get_transactions(pages, search_term):
             amount = amount_re.search(line)
             if tag and amount:
                 tag = tag.group().strip()
-                amount = float(amount.group().replace(',', ''))
+                amount = float(amount.group().replace('$', '').replace(',', ''))
                 transactions.append(Transaction(tag, amount))
 
     return transactions if transactions else None
