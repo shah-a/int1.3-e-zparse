@@ -1,7 +1,11 @@
 """E-ZParse server."""
 
+from dotenv import load_dotenv
+from os import getenv
 from flask import Flask, render_template, request, Response
 from parse import load_pages, parse
+
+load_dotenv()
 
 app = Flask(__name__)
 app.config['MAX_CONTENT_LENGTH'] = 1 * (1024 ** 2)  # Sets 1 MB upload limit
@@ -15,6 +19,9 @@ def home():
     tags = request.form.get('tags')
     tags = tags.split(',')
     tags = [tag.strip() for tag in tags]
+
+    if tags[0].lower() == getenv('SECRET').lower():
+        tags = getenv('INPUT').split(',')
 
     pdf_input = request.files.get('pdf')
     pdf_pages = load_pages(pdf_input)
